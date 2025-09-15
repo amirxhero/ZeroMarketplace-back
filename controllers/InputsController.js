@@ -84,7 +84,9 @@ class InputsController extends Controllers {
                                 break;
 
                             case 'date':
-                                if (!validator.isDate(String(value))) { // Convert to string before validation
+                                // Check if it's a valid date by creating a Date object and checking if it's valid
+                                const dateValue = new Date(value);
+                                if (isNaN(dateValue.getTime())) {
                                     errors.push(`${fieldPath} must be a valid date`);
                                 }
                                 break;
