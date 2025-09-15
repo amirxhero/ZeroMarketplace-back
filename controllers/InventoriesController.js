@@ -385,8 +385,8 @@ class InventoriesController extends Controllers {
                 let response = await this.model.inventories(
                     $query,
                     {
-                        skip : $input.offset,
-                        limit: $input.perPage,
+                        skip : Number($input.offset),
+                        limit: Number($input.perPage),
                         sort : $input.sort
                     }
                 );

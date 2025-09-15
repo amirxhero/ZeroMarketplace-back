@@ -236,8 +236,8 @@ class StockTransfersController extends Controllers {
                 const list = await this.model.transfers(
                     $query,
                     {
-                        skip : $input.offset,
-                        limit: $input.perPage,
+                        skip : Number($input.offset),
+                        limit: Number($input.perPage),
                         sort : $input.sort
                     }
                 );

@@ -233,7 +233,8 @@ router.get(
                 return res.status(response.code).json(response.data);
             },
             (error) => {
-                return res.status(error.code ?? 500).json(error.data ?? {});
+                const statusCode = error.code && typeof error.code === 'number' && error.code >= 100 && error.code < 600 ? error.code : 500;
+                return res.status(statusCode).json(error.data ?? {});
             }
         );
     }
