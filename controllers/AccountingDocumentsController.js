@@ -142,7 +142,7 @@ class AccountingDocumentsController extends Controllers {
                         // add purchase account to accounting document as debit
                         let purchaseAccount = await AccountsController.item(
                             {
-                                type       : 'system',
+                                type       : 5,
                                 description: 'cash purchase'
                             },
                             {select: '_id'}
@@ -183,7 +183,7 @@ class AccountingDocumentsController extends Controllers {
                             // debit the credit purchase account
                             let creditPurchaseAccount = await AccountsController.item(
                                 {
-                                    type       : 'system',
+                                    type       : 5,
                                     description: 'credit purchase',
                                 },
                                 {select: '_id'}
@@ -238,7 +238,7 @@ class AccountingDocumentsController extends Controllers {
                         // add sales account to accounting document as credit
                         let salesAccount = await AccountsController.item(
                             {
-                                type       : 'system',
+                                type       : 5,
                                 description: 'cash sales'
                             },
                             {select: '_id'}
@@ -279,7 +279,7 @@ class AccountingDocumentsController extends Controllers {
                             // debit the credit purchase account
                             let creditPurchaseAccount = await AccountsController.item(
                                 {
-                                    type       : 'system',
+                                    type       : 5,
                                     description: 'credit purchase'
                                 },
                                 {select: '_id'}
@@ -498,7 +498,7 @@ class AccountingDocumentsController extends Controllers {
                 let status = AccountingDocumentsModel.STATUS.DRAFT;
 
                 // check and set the input status
-                if ($input.status && $actionType === 'system') {
+                if ($input.status && $actionType === 5) {
                     status = $input.status;
                 }
 
@@ -508,7 +508,7 @@ class AccountingDocumentsController extends Controllers {
                 let type = AccountingDocumentsModel.TYPES.NORMAL;
 
                 // check and set the input type
-                if ($input.type && $actionType === 'system') {
+                if ($input.type && $actionType === 5) {
                     type = $input.type;
                 }
 
@@ -554,7 +554,7 @@ class AccountingDocumentsController extends Controllers {
                 accountingDocument.user = $input.user;
 
                 // insert to db
-                let response = await this.insertOne(accountingDocument, 'system');
+                let response = await this.insertOne(accountingDocument, 5);
 
                 // return result
                 return resolve({
