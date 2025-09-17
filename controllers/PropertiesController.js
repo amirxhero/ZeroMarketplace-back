@@ -49,26 +49,23 @@ class PropertiesController extends Controllers {
                     }
                     break;
                 case 'statuses':
-                    // check if its admin
-                    if ($input.user.data.role === 'admin') {
-                        // convert statuses to array
-                        let $arrayOfValue = $value.split(',');
-                        let $statuses     = [];
+					// apply statuses filter for any role; accept single or multiple values
+					{
+						let $arrayOfValue = $value.split(',');
+						let $statuses     = [];
 
-                        // add each status
-                        $arrayOfValue.forEach(status => {
-                            // if status is a valid number
-                            if (!isNaN(status)) {
-                                // add to array
-                                $statuses.push(Number(status));
-                            }
-                        })
+						$arrayOfValue.forEach(status => {
+							if (!isNaN(status)) {
+								$statuses.push(Number(status));
+							}
+						});
 
-                        // set the filed for query
-                        if ($statuses.length > 1) {
-                            $query['status'] = {$in: $statuses};
-                        }
-                    }
+						if ($statuses.length === 1) {
+							$query['status'] = $statuses[0];
+						} else if ($statuses.length > 1) {
+							$query['status'] = { $in: $statuses };
+						}
+					}
                     break;
             }
         }
@@ -132,18 +129,25 @@ class PropertiesController extends Controllers {
             try {
                 // validate Input
                 InputsController.validateInput($input, {
-                    title        : {type: "string"},
-                    variant      : {type: "boolean"},
-                    ids          : {type: 'string'},
-                    statuses     : {type: 'string'},
-                    perPage      : {type: "number"},
-                    page         : {type: "number"},
-                    sortColumn   : {type: "string"},
-                    sortDirection: {type: "number"},
+                    title        : { type: "string" },
+                    variant      : { type: "boolean" },
+                    ids          : { type: "string" }, // comma-separated ids
+                    statuses     : { type: "string" },
+                    perPage      : { type: "number" },
+                    page         : { type: "number" },
+                    sortColumn   : { type: "string" },
+                    sortDirection: { type: "number" },
                 });
-
-                // check filter is valid and remove other parameters (just valid query by user role) ...
+    
+              
                 let $query = this.queryBuilder($input);
+    
+            
+                if ($input.ids) {
+                    let ids = $input.ids.split(",").map(id => id.trim());
+                    $query._id = { $in: ids };
+                }
+    
                 // get list
                 const list = await this.model.list(
                     $query,
@@ -153,17 +157,16 @@ class PropertiesController extends Controllers {
                         sort : $input.sort
                     }
                 );
-
-                // get the count of properties
+    
+                // get count
                 const count = await this.model.count($query);
-
-                // create output
+    
+                // build output
                 for (const row of list) {
                     const index = list.indexOf(row);
                     list[index] = await this.outputBuilder(row.toObject());
                 }
-
-                // return result
+    
                 return resolve({
                     code: 200,
                     data: {
@@ -171,12 +174,13 @@ class PropertiesController extends Controllers {
                         total: count
                     }
                 });
-
+    
             } catch (error) {
                 return reject(error);
             }
         });
     }
+    
 
     static updateOne($input) {
         return new Promise(async (resolve, reject) => {

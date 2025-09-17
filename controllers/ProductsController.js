@@ -471,7 +471,6 @@ class ProductsController extends Controllers {
   static products($input) {
     return new Promise(async (resolve, reject) => {
       try {
-        // validate Input
         await InputsController.validateInput($input, {
           title: { type: "string" },
           statuses: { type: "string" },
@@ -480,40 +479,57 @@ class ProductsController extends Controllers {
           sortColumn: { type: "string" },
           sortDirection: { type: "number" },
         });
+  
 
-        // check filter is valid and remove other parameters (just valid query by user role) ...
-        let $query = this.queryBuilder($input);
-        // get list
+        if ($input.statuses) {
+          $input.statuses = $input.statuses
+            .split(",")
+            .map(s => Number(s.trim()))
+            .filter(Boolean);
+        }
+  
+      
+        if (!$input.sortColumn || $input.sortColumn === "") {
+          delete $input.sortColumn;
+        }
+  
+        let $query = this.queryBuilder({ data: $input });
+  
+        if ($input.statuses?.length) {
+          $query.status = { $in: $input.statuses };
+        }
+  
         const list = await this.model.list($query, {
           skip: $input.offset,
           limit: $input.perPage,
           sort: $input.sort,
         });
-
-        // get the count of properties
+  
         const count = await this.model.count($query);
-
-        // create output
+  
         for (const row of list) {
           const index = list.indexOf(row);
           list[index] = await this.outputBuilder(row.toObject());
         }
-
-        // return result
+  
         return resolve({
           code: 200,
           data: {
-            list: list,
+            list,
             total: count,
             page: $input.page,
             perPage: $input.perPage,
           },
         });
       } catch (error) {
+        console.error("❌ products error:", error);
         return reject(error);
       }
     });
   }
+  
+  
+  
 
   static updateOne($input) {
     return new Promise(async (resolve, reject) => {

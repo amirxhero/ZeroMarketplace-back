@@ -232,8 +232,6 @@ router.post(
  */
 router.get(
     '/',
-    AuthController.authorizeJWT,
-    AuthController.checkAccess,
     function (req, res) {
         // create clean input
         let $input = InputsController.clearInput(req.query);

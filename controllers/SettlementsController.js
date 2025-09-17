@@ -156,7 +156,9 @@ class SettlementsController extends Controllers {
                                 type : 'array',
                                 items: {
                                     _account: {type: 'mongoId', required: true,},
-                                    amount  : {type: 'number', required: true}
+                                    amount  : {type: 'number', required: true},
+                                    default : {type: 'boolean'},
+                                    title   : {type: 'string'}
                                 }
                             },
                             distributedCash: {type: 'boolean', required: true},
@@ -165,11 +167,14 @@ class SettlementsController extends Controllers {
                                 type : 'array',
                                 items: {
                                     _account: {type: 'mongoId', required: true,},
-                                    amount  : {type: 'number', required: true}
+                                    amount  : {type: 'number', required: true},
+                                    default : {type: 'boolean'},
+                                    title   : {type: 'string'}
                                 }
                             },
                             distributedBank: {type: 'boolean', required: true},
                             credit         : {type: 'number', required: true},
+                            remaining      : {type: 'number'},
                         },
                         required  : true
                     }
@@ -247,7 +252,9 @@ class SettlementsController extends Controllers {
                                 type : 'array',
                                 items: {
                                     _account: {type: 'mongoId', required: true,},
-                                    amount  : {type: 'number', required: true}
+                                    amount  : {type: 'number', required: true},
+                                    default : {type: 'boolean'},
+                                    title   : {type: 'string'}
                                 }
                             },
                             distributedCash: {type: 'boolean', required: true},
@@ -256,11 +263,14 @@ class SettlementsController extends Controllers {
                                 type : 'array',
                                 items: {
                                     _account: {type: 'mongoId', required: true,},
-                                    amount  : {type: 'number', required: true}
+                                    amount  : {type: 'number', required: true},
+                                    default : {type: 'boolean'},
+                                    title   : {type: 'string'}
                                 }
                             },
                             distributedBank: {type: 'boolean', required: true},
                             credit         : {type: 'number', required: true},
+                            remaining      : {type: 'number'},
                         },
                         required  : true
                     }

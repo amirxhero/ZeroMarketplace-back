@@ -79,6 +79,11 @@ class AccountsController extends Controllers {
     static initGlobalAccounts() {
         return new Promise(async (resolve, reject) => {
             try {
+				await this.model.collectionModel.updateMany(
+					{ $or: [ { status: { $exists: false } }, { status: null } ] },
+					{ $set: { status: AccountsModel.statuses.ACTIVE } }
+				);
+
                 // init system accounts array
                 const systemAccounts = [
                     // cash purchase
@@ -86,6 +91,7 @@ class AccountsController extends Controllers {
                         title      : 'خرید نقدی',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'cash purchase'
                     },
                     // credit purchase
@@ -93,6 +99,7 @@ class AccountsController extends Controllers {
                         title      : 'خرید اعتباری',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'credit purchase'
                     },
                     // cash sales
@@ -100,6 +107,7 @@ class AccountsController extends Controllers {
                         title      : 'فروش نقدی',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'cash sales'
                     },
                     // credit sales
@@ -107,6 +115,7 @@ class AccountsController extends Controllers {
                         title      : 'فروش اعتباری',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'credit sales'
                     },
                     // Return from purchase
@@ -114,6 +123,7 @@ class AccountsController extends Controllers {
                         title      : 'برگشت از خرید',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'return from purchase'
                     },
                     // return from sale
@@ -121,6 +131,7 @@ class AccountsController extends Controllers {
                         title      : 'برگشت از فروش',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'return from sale'
                     },
                     // discounts
@@ -128,6 +139,7 @@ class AccountsController extends Controllers {
                         title      : 'تخفیفات',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'discounts'
                     },
                     // tax savings
@@ -135,6 +147,7 @@ class AccountsController extends Controllers {
                         title      : 'ذخیره مالیات',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'tax savings'
                     },
                     // debtors
@@ -142,6 +155,7 @@ class AccountsController extends Controllers {
                         title      : 'بدهکاران',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'debtors'
                     },
                     // creditors
@@ -149,6 +163,7 @@ class AccountsController extends Controllers {
                         title      : 'بستانکاران',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'creditors'
                     },
                 ];
@@ -230,26 +245,6 @@ class AccountsController extends Controllers {
     static insertOne($input) {
         return new Promise(async (resolve, reject) => {
             try {
-                // Convert string type values to numbers if needed
-                if ($input.type && typeof $input.type === 'string') {
-                    const typeMap = {
-                        'cash': AccountsModel.types.CASH,
-                        'bank': AccountsModel.types.BANK,
-                        'income': AccountsModel.types.INCOME,
-                        'expense': AccountsModel.types.EXPENSE
-                    };
-                    $input.type = typeMap[$input.type.toLowerCase()];
-                    if (!$input.type) {
-                        return reject({
-                            code: 400,
-                            data: {
-                                message: 'Invalid type value. Must be one of: cash, bank, income, expense or their numeric equivalents (1, 2, 4, 3)',
-                                errors: ['type must be one of: cash, bank, income, expense or 1, 2, 4, 3']
-                            }
-                        });
-                    }
-                }
-
                 // validate input
                 await InputsController.validateInput($input, {
                     title      : {type: 'string', required: true},
@@ -259,7 +254,8 @@ class AccountsController extends Controllers {
                             AccountsModel.types.CASH,
                             AccountsModel.types.BANK,
                             AccountsModel.types.INCOME,
-                            AccountsModel.types.EXPENSE
+                            AccountsModel.types.EXPENSE,
+                            AccountsModel.types.SYSTEM,
                         ],
                         required     : true
                     },
