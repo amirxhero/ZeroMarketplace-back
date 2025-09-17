@@ -49,26 +49,23 @@ class PropertiesController extends Controllers {
                     }
                     break;
                 case 'statuses':
-                    // check if its admin
-                    if ($input.user.data.role === 'admin') {
-                        // convert statuses to array
-                        let $arrayOfValue = $value.split(',');
-                        let $statuses     = [];
+					// apply statuses filter for any role; accept single or multiple values
+					{
+						let $arrayOfValue = $value.split(',');
+						let $statuses     = [];
 
-                        // add each status
-                        $arrayOfValue.forEach(status => {
-                            // if status is a valid number
-                            if (!isNaN(status)) {
-                                // add to array
-                                $statuses.push(Number(status));
-                            }
-                        })
+						$arrayOfValue.forEach(status => {
+							if (!isNaN(status)) {
+								$statuses.push(Number(status));
+							}
+						});
 
-                        // set the filed for query
-                        if ($statuses.length > 1) {
-                            $query['status'] = {$in: $statuses};
-                        }
-                    }
+						if ($statuses.length === 1) {
+							$query['status'] = $statuses[0];
+						} else if ($statuses.length > 1) {
+							$query['status'] = { $in: $statuses };
+						}
+					}
                     break;
             }
         }
