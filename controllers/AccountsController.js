@@ -86,6 +86,7 @@ class AccountsController extends Controllers {
                         title      : 'خرید نقدی',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'cash purchase'
                     },
                     // credit purchase
@@ -93,6 +94,7 @@ class AccountsController extends Controllers {
                         title      : 'خرید اعتباری',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'credit purchase'
                     },
                     // cash sales
@@ -100,6 +102,7 @@ class AccountsController extends Controllers {
                         title      : 'فروش نقدی',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'cash sales'
                     },
                     // credit sales
@@ -107,6 +110,7 @@ class AccountsController extends Controllers {
                         title      : 'فروش اعتباری',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'credit sales'
                     },
                     // Return from purchase
@@ -114,6 +118,7 @@ class AccountsController extends Controllers {
                         title      : 'برگشت از خرید',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'return from purchase'
                     },
                     // return from sale
@@ -121,6 +126,7 @@ class AccountsController extends Controllers {
                         title      : 'برگشت از فروش',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'return from sale'
                     },
                     // discounts
@@ -128,6 +134,7 @@ class AccountsController extends Controllers {
                         title      : 'تخفیفات',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'discounts'
                     },
                     // tax savings
@@ -135,6 +142,7 @@ class AccountsController extends Controllers {
                         title      : 'ذخیره مالیات',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'tax savings'
                     },
                     // debtors
@@ -142,6 +150,7 @@ class AccountsController extends Controllers {
                         title      : 'بدهکاران',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'debtors'
                     },
                     // creditors
@@ -149,6 +158,7 @@ class AccountsController extends Controllers {
                         title      : 'بستانکاران',
                         type       : AccountsModel.types.SYSTEM,
                         balance    : 0,
+                        status     : 1,
                         description: 'creditors'
                     },
                 ];
